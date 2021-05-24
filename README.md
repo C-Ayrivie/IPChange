@@ -1,6 +1,6 @@
 # IPChange
 ``` texte
-##1)Preambule:
+1)Preambule:
 
 Le projet à etait crée pour que mes colaborateurs pour qu'ils puissent changer l'ip des ordinateur de programmation sans avoir à ouvrir les paramétres et de façon interactive pour ne pas se tromper.
 
