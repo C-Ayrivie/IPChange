@@ -1,0 +1,7 @@
+ne jamais sauter de ligne ni modifier l'ordre des lignes
+#1.ethernet="Ethernet"
+#2.eadrfixe=192.168.1.222
+#3.emasque=255.255.255.0
+#4.wifi="WI-FI"
+#5.wadrfixe=192.168.1.220
+#6.wmasque=255.255.255.0
