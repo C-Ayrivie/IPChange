@@ -60,19 +60,20 @@ set #1.ethernet="Ethernet"
 set #2.eadrfixe=192.168.1.220
 set #3.emasque=255.255.255.0
 set #4.wifi="WI-FI"
-set #5.wadrfixe=192.168.1.220
+set #5.wadrfixe=192.168.1.221
 set #6.wmasque=255.255.255.0
 
 :CARTEchoix
 REM Choix de la carte
-SET /P interface=Choix de la carte:   1/"%#1.ethernet%"   2/"%#4.wifi%"   Tapez: (1/2)? :
+SET /P interface=Choix de la carte:   1/"%#1.ethernet%"   2/"%#4.wifi%"    3/DEFINIR IP    Tapez: (1/2/3)? :
 if %interface%==1 set carte=%#1.ethernet% & set adrfixe=%#2.eadrfixe% & set masque=%#3.emasque% & goto question
 if %interface%==2 set carte=%#4.wifi% & set adrfixe=%#5.wadrfixe% & set masque=%#6.wmasque% & goto question
+if %interface%==3 goto DEFINIR
 goto CARTEchoix
 
 :question
 REM Choix du protocole
-SET /P lan=Choix adressage IP:   1/DCHP   2/FIXE   3/QUITTER   Tapez: (1/2/3)? :
+SET /P lan=Choix adressage IP:   1/DYNAMIQUE   2/FIXE    3/QUITTER   Tapez: (1/2/3)? :
 if %lan%==1 goto IPDHCP
 if %lan%==2 goto IPfixe
 if %lan%==3 goto Nfin
@@ -85,6 +86,7 @@ CLS
 SET /P lan=Confirmer l'adressage en IP Fixe "%adrfixe% %masque%"  Tapez: (O/N)? :
 if %lan%==o goto OKFixe
 if %lan%==O goto OKFixe
+if %lan%==0 goto OKFixe
 if %lan%==n goto Nfin
 if %lan%==N goto Nfin
 goto IPfixe
@@ -108,6 +110,27 @@ goto IPDHCP
 :OKDHCP
 REM Execution de la commande netsh avec les arguments passees pour l'IP en Dynamique
 netsh interface ip set address %carte% dhcp
+goto Ofin
+
+:DEFINIR
+REM Execution de la commande netsh avec les arguments passees pour l'IP en MANUEL
+SET /P cartemanu=Choix de la carte:   1/"%#1.ethernet%"   2/"%#4.wifi%": (1/2)? :
+if %cartemanu%==1 set carte=%#1.ethernet%
+if %cartemanu%==2 set carte=%#4.wifi%
+CLS
+@echo Carte selectionner: %carte%
+
+SET /P adrfixemanu=Saisir l'ip:
+set adrfixe=%adrfixemanu%
+
+SET /P masquemanu=Saisir le masque reseau:
+set masque=%masquemanu%
+
+CLS
+SET /P DEFINIRFIN=Apliquer les parametres "%carte%" "%adrfixe%" "%masque%": (O/N)? :
+if %DEFINIRFIN%==N goto Nfin
+if %DEFINIRFIN%==n goto Nfin
+netsh interface ip set address %carte% static %adrfixe% %masque%
 goto Ofin
 
 :Nfin
